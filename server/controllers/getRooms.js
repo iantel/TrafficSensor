@@ -5,22 +5,20 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://csc301:12345678@ds141185.mlab.com:41185/base');
 
 var Room = require('../models/room.js');
-var Test = require('../models/test.js');
 
-/*
-  This file needs to handle the insertion of new room documents and
-  retrieving the necessary room documents from Mlab
-*/
 
 router.get('/',function(req, res){
+  // return all the rooms
   Room.find(function(err, test) {
-    res.send(test[0].popular_hours);
+    res.send(test);
   });
 });
 
 router.post('/', function(req, res) {
-  // Create user
-  res.send('some rooms.');
+  // return the rooms with name
+  Room.find({ 'name': req.query.name }, function(err, result) {
+    res.send(result);
+  });
 });
 
 module.exports.router = router;
