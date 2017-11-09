@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
-import { View, Text, AppRegistry, StyleSheet, StatusBar, Button } from 'react-native';
+import { View, Text, AppRegistry, StyleSheet, StatusBar } from 'react-native';
 import { SearchBar, Header } from 'react-native-elements'
 
   
-export default class Preference extends Component {
+export default class Search extends Component {
   render() {
-    const { navigate } = this.props.navigation
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -15,12 +14,8 @@ color: '#fff', fontWeight: 'bold'} }}
           outerContainerStyles={{ backgroundColor: '#28B490' }}
         />
       	<View style={styles.titleWrapper}>
-        <Text style={styles.title}>Choose your prefer sutdy environment</Text>
+        <Text style={styles.title}>Search</Text>
         </View>
-        <Button
-          onPress={() => navigate('Landing')}
-          title="Landing"
-        />
       </View>
     );
   }
