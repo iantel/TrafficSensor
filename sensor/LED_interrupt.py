@@ -1,7 +1,6 @@
 import RPi.GPIO as GPIO
-import requests
 import time
-import HTTP_handler
+from HTTP_handler import HTTP_handler
 
 sensor1_state = 0 # 0 = LOW, 1 = HIGH
 sensor2_state = 0
@@ -49,7 +48,8 @@ def initialize():
 	# Enable interrupt detection on PIR sensor high edge or low edge.
 	GPIO.add_event_detect(26, GPIO.BOTH, callback=sensor1_callback, bouncetime=300)
 	GPIO.add_event_detect(23, GPIO.BOTH, callback=sensor2_callback, bouncetime=300)
-
+	
+handler = HTTP_handler()
 initialize()
 
 # Interrupt driven event loop, dont need to do anything, just wait for interrupts from the sensors.
