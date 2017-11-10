@@ -1,56 +1,41 @@
 import React, {Component} from 'react';
 import { View, Text, AppRegistry, StyleSheet, StatusBar, Image } from 'react-native';
 import { SearchBar, Header } from 'react-native-elements'
+import { StackNavigator } from 'react-navigation'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
-  
+import LandingList from './landing-list.js'
+import LandingProfile from './landing-profile.js'
+
+
+
+const LandingPage = StackNavigator({
+  Profile: { screen: LandingProfile },
+  List: { screen: LandingList},
+  }, {
+   headerMode: 'none',
+   mode: 'modal',
+   navigationOptions: {
+     gesturesEnabled: false,
+   },
+});
+
+
 export default class Landing extends Component {
 
   render() {
     return (
       <View style={styles.container}>
-        
-        <StatusBar barStyle="light-content" />
-        <Header
-          centerComponent={{ text: 'RoomFinder', style: { fontSize: 19,
-color: '#fff', fontWeight: 'bold'} }}
-          outerContainerStyles={{ backgroundColor: '#28B490' }}
-        />
-        
-
-        <View style={styles.titleWrapper}>
-        <Text style={styles.title}>Landing!</Text>
-        </View>
-        
+        <LandingPage navigation={this.props.navigation}/>
       </View>
     );
   }
 }
+Landing.router = LandingPage.router;
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  titleWrapper: {
-    flex: 2,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingTop: 20,
-  },
-
-  title: {
-    color: 'black', 
-    fontSize: 24,
-    fontWeight: 'normal',
-    textAlign: 'center',
-  },
-
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'flex-end',
   },
 });

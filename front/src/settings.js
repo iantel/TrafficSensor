@@ -3,7 +3,7 @@ import { View, Text, AppRegistry, StyleSheet, StatusBar } from 'react-native';
 import { SearchBar, Header } from 'react-native-elements'
 
   
-export default class Search extends Component {
+export default class Settings extends Component {
   render() {
     return (
       <View style={styles.container}>
@@ -14,7 +14,7 @@ color: '#fff', fontWeight: 'bold'} }}
           outerContainerStyles={{ backgroundColor: '#28B490' }}
         />
       	<View style={styles.titleWrapper}>
-        <Text style={styles.title}>Search!</Text>
+        <Text style={styles.title}>Settings!</Text>
         </View>
       </View>
     );

@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import { View, Text, AppRegistry, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, AppRegistry, StyleSheet, StatusBar, Button, Image, TouchableOpacity } from 'react-native'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SearchBar, Header } from 'react-native-elements'
 
   
-export default class Search extends Component {
+export default class LandingProfile extends Component {
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
@@ -14,7 +16,13 @@ color: '#fff', fontWeight: 'bold'} }}
           outerContainerStyles={{ backgroundColor: '#28B490' }}
         />
       	<View style={styles.titleWrapper}>
-        <Text style={styles.title}>Search!</Text>
+        <Text style={styles.title}>Landing Profile!</Text>
+        </View>
+        
+        <View style={styles.menu}>
+            <TouchableOpacity onPress={() => navigate('List')}>
+                <Ionicons name={'ios-list'} size={35} style={{ color: 'black' }} />
+            </TouchableOpacity>
         </View>
       </View>
     );
@@ -25,8 +33,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 
   titleWrapper: {
@@ -41,5 +47,13 @@ const styles = StyleSheet.create({
   	fontSize: 24,
   	fontWeight: 'normal',
     textAlign: 'center',
+  },
+    
+  menu: {
+    flex: 2,
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    paddingBottom: 10,
+    paddingRight: 25,
   },
 });
