@@ -9,6 +9,8 @@ import Landing from './src/landing.js'
 import Search from './src/search.js'
 import Settings from './src/settings.js'
 
+const serverURL = 'http://100.65.116.32:3000/get_rooms';
+
 const Footer = TabNavigator({
 
   Landing: {
@@ -47,10 +49,10 @@ const Footer = TabNavigator({
       ),
     },
   },
-      
+
 }, {
-      
-    animationEnabled: true,
+
+    animationEnabled: false,
     tabBarOptions: {
         activeTintColor: '#3A4245',
         showLabel: false,
