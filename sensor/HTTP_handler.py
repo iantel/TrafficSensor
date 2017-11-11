@@ -49,8 +49,10 @@ class HTTP_handler:
                 if requests[i].status_code == 200: # clear queue of requests that sent successfully
                     del self._queue[i]
 
-if __name__ == '__main__':
-    h = HTTP_handler()
-    h.init_thread('up')
-    for i in range(10):
-        print(i)
+                    
+#   For testing purposes
+# if __name__ == '__main__':
+#     h = HTTP_handler()
+#     h.init_thread('up')
+#     for i in range(10):
+#         print(i)
