@@ -26,7 +26,7 @@ export default class LandingProfile extends Component {
         this.setState({
           dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
           loaded: true,
-        });
+        })
       })
       .done();
   }

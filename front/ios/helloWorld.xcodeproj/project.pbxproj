@@ -318,6 +318,48 @@
 			remoteGlobalIDString = 358F4ED71D1E81A9004DF814;
 			remoteInfo = RCTBlob;
 		};
+		E297234B1FB6B13200457C74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 139D7ECE1E25DB7D00323FB7;
+			remoteInfo = "third-party";
+		};
+		E297234D1FB6B13200457C74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D383D3C1EBD27B6005632C8;
+			remoteInfo = "third-party-tvOS";
+		};
+		E297234F1FB6B13200457C74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 139D7E881E25C6D100323FB7;
+			remoteInfo = "double-conversion";
+		};
+		E29723511FB6B13200457C74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3D383D621EBD27B9005632C8;
+			remoteInfo = "double-conversion-tvOS";
+		};
+		E29723531FB6B13200457C74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9936F3131F5F2E4B0010BF04;
+			remoteInfo = privatedata;
+		};
+		E29723551FB6B13200457C74 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 9936F32F1F5F2E5B0010BF04;
+			remoteInfo = "privatedata-tvOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -513,19 +555,32 @@
 			isa = PBXGroup;
 			children = (
 				146834041AC3E56700842450 /* libReact.a */,
+<<<<<<< HEAD
 				3DAD3EA31DF850E9000B6D8A /* libReact.a */,
+=======
+				3DAD3EA31DF850E9000B6D8A /* libReact-tvOS.a */,
+>>>>>>> 3f70680b7b6e7423380721a2f617b6f0e8558b6f
 				3DAD3EA51DF850E9000B6D8A /* libyoga.a */,
 				3DAD3EA71DF850E9000B6D8A /* libyoga.a */,
 				3DAD3EA91DF850E9000B6D8A /* libcxxreact.a */,
 				3DAD3EAB1DF850E9000B6D8A /* libcxxreact.a */,
 				3DAD3EAD1DF850E9000B6D8A /* libjschelpers.a */,
 				3DAD3EAF1DF850E9000B6D8A /* libjschelpers.a */,
+<<<<<<< HEAD
 				87C517051FB77AD70095409C /* libthird-party.a */,
 				87C517071FB77AD70095409C /* libthird-party.a */,
 				87C517091FB77AD70095409C /* libdouble-conversion.a */,
 				87C5170B1FB77AD70095409C /* libdouble-conversion.a */,
 				87C5170D1FB77AD70095409C /* libprivatedata.a */,
 				87C5170F1FB77AD70095409C /* libprivatedata-tvOS.a */,
+=======
+				E297234C1FB6B13200457C74 /* libthird-party.a */,
+				E297234E1FB6B13200457C74 /* libthird-party.a */,
+				E29723501FB6B13200457C74 /* libdouble-conversion.a */,
+				E29723521FB6B13200457C74 /* libdouble-conversion.a */,
+				E29723541FB6B13200457C74 /* libprivatedata.a */,
+				E29723561FB6B13200457C74 /* libprivatedata-tvOS.a */,
+>>>>>>> 3f70680b7b6e7423380721a2f617b6f0e8558b6f
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -603,6 +658,7 @@
 				00E356EF1AD99517003FC87E /* helloWorldTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				4B1E2C4F708F42469685A1BC /* Resources */,
+				E29723271FB6ADDD00457C74 /* Recovered References */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -635,6 +691,14 @@
 				87ED38F81FB3B1F100EFC752 /* libRCTBlob-tvOS.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		E29723271FB6ADDD00457C74 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				5B18A0D0442A4CAA87E35BA2 /* libRNVectorIcons.a */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -726,7 +790,11 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+<<<<<<< HEAD
 						DevelopmentTeam = D8RTP5D2LN;
+=======
+						DevelopmentTeam = M6VE6N46E9;
+>>>>>>> 3f70680b7b6e7423380721a2f617b6f0e8558b6f
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -1067,6 +1135,48 @@
 			remoteRef = ADBDB9261DFEBF0700ED6528 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		E297234C1FB6B13200457C74 /* libthird-party.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libthird-party.a";
+			remoteRef = E297234B1FB6B13200457C74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E297234E1FB6B13200457C74 /* libthird-party.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libthird-party.a";
+			remoteRef = E297234D1FB6B13200457C74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E29723501FB6B13200457C74 /* libdouble-conversion.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libdouble-conversion.a";
+			remoteRef = E297234F1FB6B13200457C74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E29723521FB6B13200457C74 /* libdouble-conversion.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libdouble-conversion.a";
+			remoteRef = E29723511FB6B13200457C74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E29723541FB6B13200457C74 /* libprivatedata.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libprivatedata.a;
+			remoteRef = E29723531FB6B13200457C74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E29723561FB6B13200457C74 /* libprivatedata-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libprivatedata-tvOS.a";
+			remoteRef = E29723551FB6B13200457C74 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -1267,7 +1377,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = D8RTP5D2LN;
+=======
+				DEVELOPMENT_TEAM = M6VE6N46E9;
+>>>>>>> 3f70680b7b6e7423380721a2f617b6f0e8558b6f
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
@@ -1290,7 +1404,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = D8RTP5D2LN;
+=======
+				DEVELOPMENT_TEAM = M6VE6N46E9;
+>>>>>>> 3f70680b7b6e7423380721a2f617b6f0e8558b6f
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
