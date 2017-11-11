@@ -4,6 +4,7 @@ from HTTP_handler import HTTP_handler
 
 sensor1_state = 0 # 0 = LOW, 1 = HIGH
 sensor2_state = 0
+HTTP_handler = None
 
 # pin: indicates the pin on which the GPIO interrupt was triggered.
 def sensor1_callback(pin):
@@ -17,7 +18,7 @@ def sensor1_callback(pin):
 		if(sensor2_state == 1): # if the front triggered is high, then this is the 2nd sensor to trip, e.g someone is leaving the room
 			sensor1_state = 0 	# set state to 0 to avoid false positives on leaving people
 			print('leaving')
-			send_http(-1)
+			handler.init_thread('down')
 	else:	# no movement detected
 		sensor1_state = 0
 
@@ -32,7 +33,7 @@ def sensor2_callback(pin):
 		if(sensor1_state == 1):
 			sensor2_state = 0
 			print('entering')
-			send_http(1)
+			handler.init_thread('up')
 	else:
 		sensor2_state = 0
 
@@ -48,10 +49,9 @@ def initialize():
 	# Enable interrupt detection on PIR sensor high edge or low edge.
 	GPIO.add_event_detect(26, GPIO.BOTH, callback=sensor1_callback, bouncetime=300)
 	GPIO.add_event_detect(23, GPIO.BOTH, callback=sensor2_callback, bouncetime=300)
-	
-handler = HTTP_handler()
-initialize()
+	handler = HTTP_handler()
 
+initialize()
 # Interrupt driven event loop, dont need to do anything, just wait for interrupts from the sensors.
 while(1):
 	x = 1 # make compiler happy
