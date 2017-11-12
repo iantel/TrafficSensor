@@ -10,10 +10,10 @@ let height = Dimensions.get('window').height
 
 
 image = {
-    Bahen: require('../img/bahen.jpg'),
-    Gerstein: require('../img/gerstein.jpg'),
-    Robarts: require('../img/robarts.jpeg'),
-    Other: require('../img/weather.png')
+    Bahen: '../img/bahen.jpg',
+    Gerstein: '../img/gerstein.jpg',
+    Robarts: '../img/robarts.jpeg',
+    Other: '../img/weather.png'
 }
 
 var REQUEST_URL = 'http://100.65.116.32:3000/get_rooms'
@@ -61,13 +61,13 @@ export default class LandingProfile extends Component {
           console.log(responseData[i]);
           if (this.state.room.indexOf(responseData[i].name) != -1) {
             //setting img_url
-            var img = image.Other;
+            var imgURL = image.Other;
             if (responseData[i].name[0] + responseData[i].name[1] == "BA") {
-                img = image.Bahen;
+                imgURL = image.Bahen;
             } else if (responseData[i].name[0] + responseData[i].name[1] == "Ge") {
-                img = image.Gerstein;
+                imgURL = image.Gerstein;
             } else if (responseData[i].name[0] + responseData[i].name[1] == "RB") {
-                img = image.Robarts;
+                imgURL = image.Robarts;
             }
             
             
@@ -81,7 +81,7 @@ export default class LandingProfile extends Component {
                 info: this.state.info.concat([{name: responseData[i].name,
                                             cap: responseData[i].max_capacity,
                                            cur: responseData[i].current_occupancy,
-                                            image: img,
+                                            img: imgURL,
                                         }]),
             });
           }
@@ -105,15 +105,15 @@ export default class LandingProfile extends Component {
     
   renderLoadingView() {
     return (
-    <View style={styles.container}>
+    <View style={styles.loading}>
       <StatusBar barStyle="light-content" />
         <Header
           centerComponent={{ text: 'RoomFinder', style: { fontSize: 19,
 color: '#fff', fontWeight: 'bold'} }}
           outerContainerStyles={{ backgroundColor: '#28B490' }}
         />
-      <View style={styles.loading}>
-        <Text>
+      <View style={styles.titleWrapper}>
+        <Text style={styles.title}>
           Loading...
         </Text>
       </View>
@@ -129,7 +129,7 @@ color: '#fff', fontWeight: 'bold'} }}
     for (i = 0; i < this.state.info.length; i++) {
         slides.push(<View key={i} style={styles.slide}>
                         
-                        <Image source={ require('../img/weather.png')} style={styles.image} />
+                        <Image source={ require(this.state.info[i].img)} style={styles.image} />
                         <View style={styles.titleWrapper}>
                         <Text style={styles.title}>{this.state.info[i].name}</Text>
                         </View>
