@@ -20,7 +20,9 @@ export default class Search extends Component {
         searchResult:[],
         refreshing: false,
         result: [],
-        dataSource: ds.cloneWithRows([])
+        dataSource: ds.cloneWithRows([]),
+        followed:[],
+        loaded:false
     }
     this.setColor = this.setColor.bind(this);
     this.searchBarOnClick = this.searchBarOnClick.bind(this);
@@ -30,9 +32,34 @@ export default class Search extends Component {
     this.fetchData = this.fetchData.bind(this);
     this.followRoom = this.followRoom.bind(this);
     this.fetchData();
+    this.fetchData();
+    this.updateFollowed = this.updateFollowed.bind(this);
+    this.updateFollowed();
 
 
 
+  }
+
+  async updateFollowed(){
+
+     try {
+       var results = []
+       const values = await AsyncStorage.getAllKeys((err, keys) => {
+         AsyncStorage.multiGet(keys, (err, stores) => {
+           stores.map((result, i, store) => {
+             let key = store[i][0];
+             let value = store[i][1];
+             results.push(value);
+           });
+           console.log(results)
+           this.setState({
+             followed: results
+           });
+
+         });
+       });
+
+     } catch (error) {console.log(error)}
   }
 
   fetchData(){
@@ -46,7 +73,8 @@ export default class Search extends Component {
         this.setState({
             result: results.concat(),
             dataSource: ds.cloneWithRows(results.concat()),
-            refreshing: false
+            refreshing: false,
+            loaded: true
         });
       }).catch((error) => {
         Alert.alert(error);
@@ -92,7 +120,6 @@ export default class Search extends Component {
       return;
     }
     var results = [];
-    console.log(this.state.result);
     for (var i = 0; i < this.state.result.length; i++){
       if (this.state.result[i].toLowerCase().indexOf(text.toLowerCase()) != -1 && results.indexOf(this.state.result[i]) == -1){
         results.push(this.state.result[i]);
@@ -108,24 +135,20 @@ export default class Search extends Component {
   }
 
   async followRoom(name){
-    console.log("ff");
     try {
-      await AsyncStorage.setItem(name, name);
-      try {
-        const values = await AsyncStorage.getAllKeys((err, keys) => {
-          AsyncStorage.multiGet(keys, (err, stores) => {
-            stores.map((result, i, store) => {
-     // get at each store's key/value so you can work with it
-            let key = store[i][0];
-            let value = store[i][1];
-            console.log(value)
-            });
+      const value = await AsyncStorage.getItem(name);
+      if (this.state.followed.indexOf(value) != -1){
+        await AsyncStorage.removeItem(name, ()=>{
+          this.updateFollowed();
+        })
+      } else {
+        try {
+          await AsyncStorage.setItem(name, name, ()=>{
+            this.updateFollowed();
           });
-        });
-
-      } catch (error) {console.log(error)}
-    } catch (error) {console.log(error)}
-
+        } catch (error) {console.log(error)}
+      }
+    } catch (error) {}
   }
 
   render() {
@@ -193,7 +216,7 @@ export default class Search extends Component {
               <Text style = {{fontSize:15, flex: 5, top: 15, backgroundColor:'transparent'}}>
                 {rowData}
               </Text>
-              <FavoriteButton onpress={()=>this.followRoom(rowData)} followed={true}/>
+              <FavoriteButton onpress={()=>this.followRoom(rowData)} followed={this.state.followed.indexOf(rowData) != -1}/>
             </View>
           }
         />

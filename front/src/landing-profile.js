@@ -3,7 +3,7 @@ import { View, Text, AppRegistry, StyleSheet, StatusBar, Button, Image, Touchabl
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SearchBar, Header } from 'react-native-elements'
 
-  
+
 export default class LandingProfile extends Component {
   render() {
     const { navigate } = this.props.navigation;
@@ -18,7 +18,7 @@ color: '#fff', fontWeight: 'bold'} }}
       	<View style={styles.titleWrapper}>
         <Text style={styles.title}>Landing Profile!</Text>
         </View>
-        
+
         <View style={styles.menu}>
             <TouchableOpacity onPress={() => navigate('List')}>
                 <Ionicons name={'ios-list'} size={35} style={{ color: 'black' }} />
@@ -43,12 +43,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-  	color: 'black', 
+  	color: 'black',
   	fontSize: 24,
   	fontWeight: 'normal',
     textAlign: 'center',
   },
-    
+
   menu: {
     flex: 2,
     alignItems: 'flex-end',
