@@ -51,7 +51,6 @@ const Footer = TabNavigator({
   },
 
 }, {
-
     animationEnabled: false,
     tabBarOptions: {
         activeTintColor: '#3A4245',
