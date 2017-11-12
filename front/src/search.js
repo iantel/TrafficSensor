@@ -1,11 +1,7 @@
 import React, {Component} from 'react';
-import { View, Text, AppRegistry, StyleSheet, StatusBar ,AsyncStorage} from 'react-native';
+import { View, Text, AppRegistry, StyleSheet, StatusBar ,AsyncStorage, TouchableWithoutFeedback, Alert, ListView, RefreshControl} from 'react-native';
 import { SearchBar, Header } from 'react-native-elements'
 const Dimensions = require('Dimensions');
-import { TouchableWithoutFeedback } from 'react-native'
-import { Alert } from 'react-native'
-import { ListView } from 'react-native'
-import { RefreshControl } from 'react-native'
 import FavoriteButton from './components/favoriteButton.js'
 
 export default class Search extends Component {
@@ -63,6 +59,7 @@ export default class Search extends Component {
   }
 
   fetchData(){
+
     fetch('http://100.65.116.32:3000/get_rooms').then((response) =>
       response.json()).then((responseJson) => {
         var results = [];

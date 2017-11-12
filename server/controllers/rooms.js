@@ -21,26 +21,39 @@ router.post('/', function(req, res) {
     if (req.query.count == "up") {
 
 	    Room.find({ 'name': req.query.name }, function(err, result) {
-	  		if(result) {
+	  
+	   //  if (!result) {
+	   //  	res.sendStatus(418)
+	   //  }
+  		// else 
+	  		if(result[0] != null) {
 	  			result[0].current_occupancy = result[0].current_occupancy + 1;
-	  			result[0].save()
-	  			res.send('some rooms.');
-
-
-	  		}
+	  			result[0].save();
+	  			res.sendStatus(200);
+		  	} else {
+		  		res.sendStatus(418)
+		  	}
 
 	    });
 	} else if (req.query.count == "down") {
 
 	    Room.find({ 'name': req.query.name }, function(err, result) {
-	  		if(result) {
+	  		// if (!result) {
+	  		// 	res.sendStatus(418)
+	  		// }
+	  		// else 
+	  			if(result[0] != null) {
 	  			result[0].current_occupancy = result[0].current_occupancy - 1;
-	  			result[0].save()
-	  			res.send('some rooms.');
+	  			result[0].save();
+	  			res.sendStatus(200);
 
-	  		}
+		  	} else {
+		  		res.sendStatus(418)
+		  	}
 
 	    });
+	} else {
+		res.sendStatus(418)
 	}
 });
 
