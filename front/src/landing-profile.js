@@ -1,9 +1,12 @@
-import React, {Component, Dimensions} from 'react';
+import React, {Component} from 'react';
 import { View, Text, AppRegistry, StyleSheet, StatusBar, Button, Image,ImageBackground, TouchableOpacity, TouchableWithoutFeedback, Alert, ListView, RefreshControl, AsyncStorage } from 'react-native'
+const Dimensions = require('Dimensions');
 import Swiper from 'react-native-swiper'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SearchBar, Header } from 'react-native-elements'
 
+let width = Dimensions.get('window').width
+let height = Dimensions.get('window').height
 
 
 image = {
@@ -21,6 +24,7 @@ export default class LandingProfile extends Component {
     this.state = {
       room: [],
       info: [],
+      index: 0,
       loaded: false,
     }
     this.fetchFavorites();
@@ -65,6 +69,13 @@ export default class LandingProfile extends Component {
             } else if (responseData[i].name[0] + responseData[i].name[1] == "RB") {
                 img = image.Robarts;
             }
+            
+            
+            if (this.props.navigation.state.params) {
+                if (this.props.navigation.state.params.name == responseData[i].name) {
+                this.setState({index: i});
+                }
+            }
 
             this.setState({
                 info: this.state.info.concat([{name: responseData[i].name,
@@ -81,103 +92,104 @@ export default class LandingProfile extends Component {
       })
       .done();
   }
-//
-//  render() {
-//    if (!this.state.loaded) {
-//      return this.renderLoadingView();
-//    }
-//
-//    return this.renderSwiper();
-//  }
-//
-//  renderLoadingView() {
-//    return (
-//    <View>
-//      <StatusBar barStyle="light-content" />
-//        <Header
-//          centerComponent={{ text: 'RoomFinder', style: { fontSize: 19,
-//color: '#fff', fontWeight: 'bold'} }}
-//          outerContainerStyles={{ backgroundColor: '#28B490' }}
-//        />
-//      <View style={styles.loading}>
-//        <Text>
-//          Loading...
-//        </Text>
-//      </View>
-//    </View>
-//    );
-//  }
-//
-//
-//  renderSwiper() {
-//    let slides = [];
-//    const { navigate } = this.props.navigation;
-//
-//    for (i = 0; i < 3; i++) {
-//        slides.push(<View key={i} style={styles.slide}>
-//                    <View  style={styles.container}>
-//                        <View style={styles.overlay}/>
-//                        <Image source={ require('../img/gerstein.png')} style={styles.image} />
-//
-//                        <StatusBar barStyle="light-content" />
-//
-//                        <View style={styles.titleWrapper}>
-//                        <Text style={styles.title}>{this.state.info[i].name}</Text>
-//                        </View>
-//
-//                        <View style={styles.textWrapper}>
-//                        <Text style={styles.text}>1/10</Text>
-//                        </View>
-//
-//                     </View>
-//                     </View>
-//                     );
-//    }
-//
-//
-//    return (
-//
-//        <View style={styles.container}>
-//            <Swiper style={styles.wrapper}
-//          dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7,}} /> }
-//          activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7,}} />}
-//          paginationStyle={{
-//            bottom: 70
-//          }}
-//          loop={false}>
-//                {slides}
-//            </Swiper>
-//            <View style={styles.menu}>
-//                <TouchableOpacity onPress={() => navigate('List')}>
-//                    <Ionicons name={'ios-list'} size={45} style={{ color: 'white', backgroundColor: 'transparent' }} />
-//                </TouchableOpacity>
-//            </View>
-//        </View>
-//
-//    );
-//  }
-//
-  render() {
-    const { navigate } = this.props.navigation;
-    return (
-      <ImageBackground source={ require('../img/gerstein.jpg') } style={styles.container}>
-        <View style={styles.overlay}/>
-        <StatusBar barStyle="light-content" />
-      	<View style={styles.titleWrapper}>
-        <Text style={styles.title}>Gerstein</Text>
-        </View>
-        <View style={styles.textWrapper}>
-        <Text style={styles.text}>55/120</Text>
-        </View>
 
-        <View style={styles.menu}>
-            <TouchableOpacity onPress={() => navigate('List')}>
-                <Ionicons name={'ios-list'} size={45} style={{ color: 'white', backgroundColor: 'transparent' }} />
-            </TouchableOpacity>
-        </View>
-      </ImageBackground>
+  render() {
+    if (!this.state.loaded) {
+      return this.renderLoadingView();
+    }
+
+    return this.renderSwiper();
+  }
+
+  
+    
+  renderLoadingView() {
+    return (
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" />
+        <Header
+          centerComponent={{ text: 'RoomFinder', style: { fontSize: 19,
+color: '#fff', fontWeight: 'bold'} }}
+          outerContainerStyles={{ backgroundColor: '#28B490' }}
+        />
+      <View style={styles.loading}>
+        <Text>
+          Loading...
+        </Text>
+      </View>
+    </View>
     );
   }
+
+
+  renderSwiper() {
+    let slides = [];
+    const { navigate } = this.props.navigation;
+    
+    for (i = 0; i < this.state.info.length; i++) {
+        slides.push(<View key={i} style={styles.slide}>
+                        
+                        <Image source={ require('../img/weather.png')} style={styles.image} />
+                        <View style={styles.titleWrapper}>
+                        <Text style={styles.title}>{this.state.info[i].name}</Text>
+                        </View>
+                        
+                        <View style={styles.textWrapper}>
+                        <Text style={styles.text}>{this.state.info[i].cur}/{this.state.info[i].cap}</Text>
+                        </View>
+                        
+                     </View>
+                     );
+    }
+      
+      
+    return (
+        <View style={styles.container}>
+            <StatusBar barStyle="light-content" />
+            <Swiper style={styles.wrapper} index={this.state.index}
+              dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7,}} /> }
+              activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7,}} />}
+              paginationStyle={{
+                bottom: 70
+              }}
+              loop={true}>
+        
+              {slides}
+        
+            </Swiper>
+            <View style={styles.menu}>
+                <TouchableOpacity onPress={() => navigate('List')}>
+                    <Ionicons name={'ios-list'} size={45} style={{ color: 'white', backgroundColor: 'transparent' }} />
+                </TouchableOpacity>
+            </View>
+        </View>
+    
+    );  
+  }
+    
+//  render() {
+//    const { navigate } = this.props.navigation;
+//    return (
+//      <ImageBackground source={ require('../img/gerstein.jpg') } style={styles.container}>
+//        <View style={styles.overlay}/>
+//        <StatusBar barStyle="light-content" />
+//      	<View style={styles.titleWrapper}>
+//        <Text style={styles.title}>Gerstein</Text>
+//        </View>
+//        <View style={styles.textWrapper}>
+//        <Text style={styles.text}>55/120</Text>
+//        </View>
+//        
+//        <View style={styles.menu}>
+//            <TouchableOpacity onPress={() => navigate('List')}>
+//                <Ionicons name={'ios-list'} size={45} style={{ color: 'white', backgroundColor: 'transparent' }} />
+//            </TouchableOpacity>
+//        </View>
+//      </ImageBackground>
+//    );
+//  }
+
+
 }
 
 
@@ -198,17 +210,16 @@ const styles = StyleSheet.create({
   overlay: {
     position: 'absolute',
     top: 0,
-    right: 0,
-    bottom: 0,
     left: 0,
-    backgroundColor: '#606060',
-    opacity: 0.9,
+    height: height,
+    width: width,
+    backgroundColor: '#00000099',
   },
 
   image: {
     position: 'absolute',
-    height: 687,
-    width: 376,
+    height: height,
+    width: width,
     top: 0,
     right: 0,
     bottom: 0,
@@ -216,6 +227,7 @@ const styles = StyleSheet.create({
   },
 
   titleWrapper: {
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     paddingTop: 60,
   },
@@ -229,7 +241,8 @@ const styles = StyleSheet.create({
   },
 
   textWrapper: {
-    flex: 2,
+    height: 100,
+    backgroundColor: 'transparent',
     flexDirection: 'row',
     justifyContent: 'center',
     paddingTop: 20,
@@ -237,8 +250,8 @@ const styles = StyleSheet.create({
 
   text: {
     backgroundColor: 'transparent',
-  	color: 'white',
-  	fontSize: 20,
+  	color: 'white', 
+  	fontSize: 25,
   	fontWeight: 'normal',
     textAlign: 'center',
   },
@@ -249,6 +262,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingBottom: 15,
     paddingRight: 30,
-    height: 20,
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
   },
 });
