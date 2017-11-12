@@ -13,7 +13,7 @@ class HTTP_handler:
 
     def __init__(self):
         self._queue = Queue()
-        self._url = 'http://httpbin.org/post'   # placeholder until we find a host
+        self._url = 'http://httpbin.org/'   # placeholder until we find a host
         self._pending = 0
         self._queue_lock = Lock()
 
@@ -51,8 +51,9 @@ class HTTP_handler:
             if (self._pending == 5):
                 self._send_batch()
                 self._pending = 0
+        print(self._pending)
 
-
+        
     #   Start a batch POST request for previously failed POST calls
     #   Send POST calls for every event in the queue, and empty it of successful ones once finished
     #   Uses grequests library to send all POST calls at the same time 
@@ -73,18 +74,7 @@ class HTTP_handler:
 #   For testing purposes
 if __name__ == '__main__':
     h = HTTP_handler()
-    h._queue = [grequests.post('http://httpbin.org/post', json={'count':'up'}),
-    grequests.post('http://httpbin/', json={'count':'up'}),
-    grequests.post('http://httpbin.org/post', json={'count':'up'}),
-    grequests.post('http://httpbin.org/post', json={'count':'up'})]
 
-    h._init_thread("up")
-    h._init_thread("down")
-    h._init_thread("down")
-    h._init_thread("down")
-    h._init_thread("down")
-    h._init_thread("up")
-    h._init_thread("down")
-    h._init_thread("down")
-    h._init_thread("down")
-    h._init_thread("down")
+    h.handle("up")
+    h.handle("down")
+    h.handle("down")
