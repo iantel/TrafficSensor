@@ -8,6 +8,7 @@ import { SearchBar, Header } from 'react-native-elements'
 let width = Dimensions.get('window').width
 let height = Dimensions.get('window').height
 
+
 image = {
     Bahen: require('../img/bahen.jpg'),
     Gerstein: require('../img/gerstein.jpg'),
@@ -15,20 +16,21 @@ image = {
     Other: require('../img/weather.png')
 }
 
-var REQUEST_URL = 'http://100.65.116.32:3000/get_rooms' 
+var REQUEST_URL = 'http://100.65.116.32:3000/get_rooms'
 
 export default class LandingProfile extends Component {
   constructor(props) {
-    super(props) 
+    super(props)
     this.state = {
       room: [],
       info: [],
+      index: 0,
       loaded: false,
     }
     this.fetchFavorites();
     console.log(this.state.room);
   }
-   
+
   async fetchFavorites() {
       try {
         const values = await AsyncStorage.getAllKeys((err, keys) => {
@@ -43,9 +45,9 @@ export default class LandingProfile extends Component {
         });
 
       } catch (error) {console.log(error)}
-  }    
-    
-    
+  }
+
+
   componentDidMount() {
     this.fetchData();
   }
@@ -67,14 +69,21 @@ export default class LandingProfile extends Component {
             } else if (responseData[i].name[0] + responseData[i].name[1] == "RB") {
                 img = image.Robarts;
             }
-              
+            
+            
+            if (this.props.navigation.state.params) {
+                if (this.props.navigation.state.params.name == responseData[i].name) {
+                this.setState({index: i});
+                }
+            }
+
             this.setState({
-                info: this.state.info.concat([{name: responseData[i].name, 
-                                            cap: responseData[i].max_capacity, 
+                info: this.state.info.concat([{name: responseData[i].name,
+                                            cap: responseData[i].max_capacity,
                                            cur: responseData[i].current_occupancy,
                                             image: img,
                                         }]),
-            });     
+            });
           }
         }
         console.log("done fetching!");
@@ -83,7 +92,7 @@ export default class LandingProfile extends Component {
       })
       .done();
   }
-    
+
   render() {
     if (!this.state.loaded) {
       return this.renderLoadingView();
@@ -92,13 +101,11 @@ export default class LandingProfile extends Component {
     return this.renderSwiper();
   }
 
-  this.defaultProps = {
-      name: null,
-  };
+  
     
   renderLoadingView() {
     return (
-    <View>
+    <View style={styles.container}>
       <StatusBar barStyle="light-content" />
         <Header
           centerComponent={{ text: 'RoomFinder', style: { fontSize: 19,
@@ -139,8 +146,7 @@ color: '#fff', fontWeight: 'bold'} }}
     return (
         <View style={styles.container}>
             <StatusBar barStyle="light-content" />
-            <Swiper style={styles.wrapper} 
-              ref={scrollBy => this.scrollBy = scrollBy}
+            <Swiper style={styles.wrapper} index={this.state.index}
               dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7,}} /> }
               activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7,}} />}
               paginationStyle={{
@@ -193,18 +199,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 
-  slide: {
-    flex: 1,  
-  },
-    
   loading: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',  
+    backgroundColor: '#F5FCFF',
   },
-    
+
   overlay: {
     position: 'absolute',
     top: 0,
@@ -232,12 +234,12 @@ const styles = StyleSheet.create({
 
   title: {
     backgroundColor: 'transparent',
-  	color: 'white', 
+  	color: 'white',
   	fontSize: 30,
   	fontWeight: 'normal',
     textAlign: 'center',
   },
-    
+
   textWrapper: {
     height: 100,
     backgroundColor: 'transparent',
@@ -253,7 +255,7 @@ const styles = StyleSheet.create({
   	fontWeight: 'normal',
     textAlign: 'center',
   },
-    
+
   menu: {
     backgroundColor: 'transparent',
     alignItems: 'flex-end',
