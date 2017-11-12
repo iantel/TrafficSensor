@@ -1,0 +1,6 @@
+.DS_Store
+front/package-lock.json
+server/node_modules/fsevents/
+server/
+node_modules/mongoose/lib/services/projection/isInclusive.js
+node_modules/nan/
