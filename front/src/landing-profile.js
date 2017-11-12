@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SearchBar, Header } from 'react-native-elements'
 
 
+
 image = {
     Bahen: require('../img/bahen.jpg'),
     Gerstein: require('../img/gerstein.jpg'),
@@ -12,11 +13,11 @@ image = {
     Other: require('../img/weather.png')
 }
 
-var REQUEST_URL = 'http://100.65.116.32:3000/get_rooms' 
+var REQUEST_URL = 'http://100.65.116.32:3000/get_rooms'
 
 export default class LandingProfile extends Component {
   constructor(props) {
-    super(props) 
+    super(props)
     this.state = {
       room: [],
       info: [],
@@ -25,7 +26,7 @@ export default class LandingProfile extends Component {
     this.fetchFavorites();
     console.log(this.state.room);
   }
-   
+
   async fetchFavorites() {
       try {
         const values = await AsyncStorage.getAllKeys((err, keys) => {
@@ -40,9 +41,9 @@ export default class LandingProfile extends Component {
         });
 
       } catch (error) {console.log(error)}
-  }    
-    
-    
+  }
+
+
   componentDidMount() {
     this.fetchData();
   }
@@ -64,14 +65,14 @@ export default class LandingProfile extends Component {
             } else if (responseData[i].name[0] + responseData[i].name[1] == "RB") {
                 img = image.Robarts;
             }
-              
+
             this.setState({
-                info: this.state.info.concat([{name: responseData[i].name, 
-                                            cap: responseData[i].max_capacity, 
+                info: this.state.info.concat([{name: responseData[i].name,
+                                            cap: responseData[i].max_capacity,
                                            cur: responseData[i].current_occupancy,
                                             image: img,
                                         }]),
-            });     
+            });
           }
         }
         console.log("done fetching!");
@@ -80,7 +81,7 @@ export default class LandingProfile extends Component {
       })
       .done();
   }
-//    
+//
 //  render() {
 //    if (!this.state.loaded) {
 //      return this.renderLoadingView();
@@ -111,31 +112,31 @@ export default class LandingProfile extends Component {
 //  renderSwiper() {
 //    let slides = [];
 //    const { navigate } = this.props.navigation;
-//    
+//
 //    for (i = 0; i < 3; i++) {
 //        slides.push(<View key={i} style={styles.slide}>
 //                    <View  style={styles.container}>
 //                        <View style={styles.overlay}/>
 //                        <Image source={ require('../img/gerstein.png')} style={styles.image} />
-//                        
+//
 //                        <StatusBar barStyle="light-content" />
-//                            
+//
 //                        <View style={styles.titleWrapper}>
 //                        <Text style={styles.title}>{this.state.info[i].name}</Text>
 //                        </View>
-//                        
+//
 //                        <View style={styles.textWrapper}>
 //                        <Text style={styles.text}>1/10</Text>
 //                        </View>
-//                        
+//
 //                     </View>
 //                     </View>
 //                     );
 //    }
-//      
-//      
+//
+//
 //    return (
-//        
+//
 //        <View style={styles.container}>
 //            <Swiper style={styles.wrapper}
 //          dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7,}} /> }
@@ -152,10 +153,10 @@ export default class LandingProfile extends Component {
 //                </TouchableOpacity>
 //            </View>
 //        </View>
-//    
-//    );  
+//
+//    );
 //  }
-//    
+//
   render() {
     const { navigate } = this.props.navigation;
     return (
@@ -168,7 +169,7 @@ export default class LandingProfile extends Component {
         <View style={styles.textWrapper}>
         <Text style={styles.text}>55/120</Text>
         </View>
-        
+
         <View style={styles.menu}>
             <TouchableOpacity onPress={() => navigate('List')}>
                 <Ionicons name={'ios-list'} size={45} style={{ color: 'white', backgroundColor: 'transparent' }} />
@@ -185,15 +186,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
   },
-    
+
   loading: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',  
+    backgroundColor: '#F5FCFF',
   },
-    
+
   overlay: {
     position: 'absolute',
     top: 0,
@@ -221,12 +222,12 @@ const styles = StyleSheet.create({
 
   title: {
     backgroundColor: 'transparent',
-  	color: 'white', 
+  	color: 'white',
   	fontSize: 30,
   	fontWeight: 'normal',
     textAlign: 'center',
   },
-    
+
   textWrapper: {
     flex: 2,
     flexDirection: 'row',
@@ -236,12 +237,12 @@ const styles = StyleSheet.create({
 
   text: {
     backgroundColor: 'transparent',
-  	color: 'white', 
+  	color: 'white',
   	fontSize: 20,
   	fontWeight: 'normal',
     textAlign: 'center',
   },
-    
+
   menu: {
     backgroundColor: 'transparent',
     alignItems: 'flex-end',
