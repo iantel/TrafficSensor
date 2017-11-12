@@ -1,34 +1,42 @@
 import React, {Component} from 'react';
-import { View, Text, AppRegistry, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, AppRegistry, StyleSheet, StatusBar ,AsyncStorage} from 'react-native';
 import { SearchBar, Header } from 'react-native-elements'
 const Dimensions = require('Dimensions');
 import { TouchableWithoutFeedback } from 'react-native'
 import { Alert } from 'react-native'
 import { ListView } from 'react-native'
 import { RefreshControl } from 'react-native'
+import FavoriteButton from './components/favoriteButton.js'
 
 export default class Search extends Component {
 
   constructor(props) {
     super(props);
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var result = [];
-    this.result = ["dd", "ddss"];
     this.state = {
         searchBarWidth: Dimensions.get('window').width*0.96,
         cancelButtonHidden: true,
         searchValue: "",
         searchResult:[],
         refreshing: false,
-        result: this.result,
-        dataSource: ds.cloneWithRows(this.result)
+        result: [],
+        dataSource: ds.cloneWithRows([])
     }
     this.setColor = this.setColor.bind(this);
     this.searchBarOnClick = this.searchBarOnClick.bind(this);
     this.searchBarOnReturn = this.searchBarOnReturn.bind(this);
     this.overlayOnTouch = this.overlayOnTouch.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
-    fetch(serverURL+'get_rooms').then((response) =>
+    this.fetchData = this.fetchData.bind(this);
+    this.followRoom = this.followRoom.bind(this);
+    this.fetchData();
+
+
+
+  }
+
+  fetchData(){
+    fetch('http://100.65.116.32:3000/get_rooms').then((response) =>
       response.json()).then((responseJson) => {
         var results = [];
         for(var i in responseJson){
@@ -37,14 +45,14 @@ export default class Search extends Component {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.setState({
             result: results.concat(),
-            dataSource: ds.cloneWithRows(results.concat())
+            dataSource: ds.cloneWithRows(results.concat()),
+            refreshing: false
         });
       }).catch((error) => {
         Alert.alert(error);
       });
-
-
   }
+
   setColor(color) {
     this.setState({
         bColor: color
@@ -72,22 +80,7 @@ export default class Search extends Component {
 
   _onRefresh() {
     this.setState({refreshing: true});
-    fetch('http://100.65.116.32:3000/get_rooms').then((response) =>
-      response.json()).then((responseJson) => {
-        var results = [];
-        for(var i in responseJson){
-          results.push(responseJson[i]['name']);
-        }
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.setState({
-            result: results.concat(),
-            dataSource: ds.cloneWithRows(results.concat())
-        });
-      }).catch((error) => {
-        Alert.alert(error);
-      }).then(() => {
-      this.setState({refreshing: false});
-    });
+    this.fetchData();
   }
 
   updateSearch(text){
@@ -113,6 +106,28 @@ export default class Search extends Component {
         dataSource: ds.cloneWithRows(results),
     })
   }
+
+  async followRoom(name){
+    console.log("ff");
+    try {
+      await AsyncStorage.setItem(name, name);
+      try {
+        const values = await AsyncStorage.getAllKeys((err, keys) => {
+          AsyncStorage.multiGet(keys, (err, stores) => {
+            stores.map((result, i, store) => {
+     // get at each store's key/value so you can work with it
+            let key = store[i][0];
+            let value = store[i][1];
+            console.log(value)
+            });
+          });
+        });
+
+      } catch (error) {console.log(error)}
+    } catch (error) {console.log(error)}
+
+  }
+
   render() {
     let button = null;
     let overlay = null;
@@ -134,9 +149,7 @@ export default class Search extends Component {
     }
     return (
       <View style={styles.container}>
-
         <StatusBar barStyle="light-content" />
-
         <SearchBar
           icon={
             { color: 'rgb(152, 152, 152)', name: 'search' , style:{top:30}}
@@ -164,27 +177,27 @@ export default class Search extends Component {
           }
 
           onEndEditing={() => this.searchBarOnReturn()}
-        />
-
+          />
         <ListView
+          enableEmptySections={true}
           refreshControl={
             <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={this._onRefresh.bind(this)}
             />
           }
+          enableEmptySection={true}
           dataSource={this.state.dataSource}
           renderRow={(rowData) =>
             <View style = {styles.searchItem}>
-              <Text style = {{fontSize:15, top:5}}>
+              <Text style = {{fontSize:15, flex: 5, top: 15, backgroundColor:'transparent'}}>
                 {rowData}
               </Text>
+              <FavoriteButton onpress={()=>this.followRoom(rowData)} followed={true}/>
             </View>
           }
         />
         {overlay}
-
-
 
       </View>
     );
@@ -203,7 +216,7 @@ const styles = StyleSheet.create({
     left:30,
     borderBottomColor: '#47315a',
     borderBottomWidth: 0.3,
-    justifyContent: 'center'
+    flexDirection:'row'
   },
 
   titleWrapper: {

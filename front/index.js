@@ -9,7 +9,7 @@ import Landing from './src/landing.js'
 import Search from './src/search.js'
 import Settings from './src/settings.js'
 
-const serverURL = 'http://100.65.116.32:3000/get_rooms';
+const serverURL = 'http://100.65.116.32:3000/';
 
 const Footer = TabNavigator({
 
