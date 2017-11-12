@@ -48,25 +48,24 @@ class HTTP_handler:
         t.join()
     #   Send POST calls for every event in the queue, and empty it of successful ones once finished
     #   Uses grequests library to send all POST calls at the same time 
+    
     def _send_batch(self):
         grequests.map(self._queue)
-        # for i in range(len(requests)):
-        #     if (requests[i] is not None):
-        #         if requests[i].response == 200: # clear queue of requests that sent successfully
-        #             print(requests[i].response)
-        #             del self._queue[i]
+        # only keep queue entries that didn't get an OK response from the server
+        new_queue = [request for request in self._queue if self._is_invalid(request)]
+        self._queue = new_queue
+    
+    def _is_invalid(self, request):
+        return request.response is None or not request.response.ok
 
-                    
 #   For testing purposes
 if __name__ == '__main__':
     h = HTTP_handler()
     h._queue = [grequests.post(h._url, json={'count':'up'}),
-    grequests.post(h._url, json={'count':'up'}),
+    grequests.post('http://httpbin.org/', json={'count':'up'}),
     grequests.post(h._url, json={'count':'up'}),
     grequests.post(h._url, json={'count':'up'})]
 
     h._init_batch()
-    while (h._queue[0].response is None):
-       print(h._queue[0].response)
-    # for i in range(len(h._queue)):
-    #     print(h._queue[i].response)
+    for i in range(len(h._queue)):
+         print(h._queue[i].response)
