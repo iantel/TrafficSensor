@@ -18,7 +18,7 @@ def sensor1_callback(pin):
 		if(sensor2_state == 1): # if the front triggered is high, then this is the 2nd sensor to trip, e.g someone is leaving the room
 			sensor1_state = 0 	# set state to 0 to avoid false positives on leaving people
 			print('leaving')
-			handler.init_thread('down')
+			handler.handle('down')
 	else:	# no movement detected
 		sensor1_state = 0
 
@@ -33,7 +33,7 @@ def sensor2_callback(pin):
 		if(sensor1_state == 1):
 			sensor2_state = 0
 			print('entering')
-			handler.init_thread('up')
+			handler.handle('up')
 	else:
 		sensor2_state = 0
 
