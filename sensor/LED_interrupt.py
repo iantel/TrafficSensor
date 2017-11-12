@@ -54,4 +54,4 @@ def initialize():
 initialize()
 # Interrupt driven event loop, dont need to do anything, just wait for interrupts from the sensors.
 while(1):
-	x = 1 # make compiler happy
+	continue

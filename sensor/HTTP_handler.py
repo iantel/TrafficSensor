@@ -13,7 +13,7 @@ class HTTP_handler:
 
     def __init__(self):
         self._queue = Queue()
-        self._url = 'http://httpbin.org/'   # placeholder until we find a host
+        self._url = 'http://100.65.116.32:3000/get_rooms'
         self._pending = 0
         self._queue_lock = Lock()
 
@@ -32,13 +32,13 @@ class HTTP_handler:
         while (tries < 3):
             print("Attempting to send...")
             # timeout is 3 seconds at which point we store it on a queue to POST at a later point in time.
-            request = Request('POST', self._url, json={'count':event_type}).prepare()
+            request = Request('POST', self._url, params={'name':'BA3200'}).prepare()
             try:
                 response = Session().send(request, timeout=3.0)
                 response.raise_for_status() # raise an HTTPError if response code wasn't 200
-                print("OK: " + str(response.status_code)) 
+                print(response.status_code)
                 return
-            except (exceptions.Timeout, exceptions.HTTPError) as e:
+            except (exceptions.ReadTimeout, exceptions.HTTPError) as e:
                 sleep(2**sleep_time)
                 sleep_time = sleep_time + 1
                 tries = tries + 1
@@ -53,7 +53,7 @@ class HTTP_handler:
                 self._pending = 0
         print(self._pending)
 
-        
+
     #   Start a batch POST request for previously failed POST calls
     #   Send POST calls for every event in the queue, and empty it of successful ones once finished
     #   Uses grequests library to send all POST calls at the same time 
@@ -76,5 +76,3 @@ if __name__ == '__main__':
     h = HTTP_handler()
 
     h.handle("up")
-    h.handle("down")
-    h.handle("down")
