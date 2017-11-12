@@ -1,6 +1,7 @@
 from requests import Request, Session, exceptions
 import grequests
-from threading import Thread
+from threading import Thread, Lock
+from queue import Queue
 from time import sleep
 
 class HTTP_handler:
@@ -8,15 +9,17 @@ class HTTP_handler:
     _queue = None
     _url = None
     _pending = None
+    _queue_lock = None
 
     def __init__(self):
-        self._queue = []
-        self._url = 'http://httpbin.org/post'
+        self._queue = Queue()
+        self._url = 'http://100.65.116.32:3000/get_rooms'
         self._pending = 0
+        self._queue_lock = Lock()
 
     #   Anytime the sensor picks up interesting activity (entering or leaving)
     #   call this method to create a thread that sends the POST call, so that it doesn't block
-    def init_thread(self, event_type):
+    def handle(self, event_type):
         t = Thread(target=self._send_post, args=(event_type,))
         t.start()
 
@@ -29,31 +32,41 @@ class HTTP_handler:
         while (tries < 3):
             print("Attempting to send...")
             # timeout is 3 seconds at which point we store it on a queue to POST at a later point in time.
-            request = Request('POST', self._url, json={'count':event_type}).prepare()
+            request = Request('POST', self._url, params={'name':'BA3200'}).prepare()
             try:
                 response = Session().send(request, timeout=3.0)
-                response.raise_for_status() # raise an HTTPError if response code wasn't 200 
+                response.raise_for_status() # raise an HTTPError if response code wasn't 200
+                print(response.status_code)
                 return
-            except (exceptions.Timeout, exceptions.HTTPError) as e:
+            except (exceptions.ReadTimeout, exceptions.HTTPError) as e:
                 sleep(2**sleep_time)
                 sleep_time = sleep_time + 1
                 tries = tries + 1
                 continue
-        self._queue.append(grequests.post(self._url, json={'count':event_type}))
-    
-    #   Start a thread that will send a batch request for previously failed POST calls
-    def _init_batch(self):
-        t = Thread(target=self._send_batch)
-        t.start()
-        t.join()
+        self._queue.put_nowait(grequests.post(self._url, json={'count':event_type}))
+
+        # If we have enough previously failed calls, attempt to send them at once
+        with self._queue_lock:
+            self._pending = self._pending + 1
+            if (self._pending == 5):
+                self._send_batch()
+                self._pending = 0
+        print(self._pending)
+
+
+    #   Start a batch POST request for previously failed POST calls
     #   Send POST calls for every event in the queue, and empty it of successful ones once finished
     #   Uses grequests library to send all POST calls at the same time 
-    
     def _send_batch(self):
-        grequests.map(self._queue)
+        pending_calls = []
+        while (self._queue.qsize() != 0):
+            pending_calls.append(self._queue.get_nowait())
+        
+        grequests.map(pending_calls, gtimeout=5)
         # only keep queue entries that didn't get an OK response from the server
-        new_queue = [request for request in self._queue if self._is_invalid(request)]
-        self._queue = new_queue
+        for call in pending_calls:
+            if (self._is_invalid(call)):
+                self._queue.put_nowait(call)
     
     def _is_invalid(self, request):
         return request.response is None or not request.response.ok
@@ -61,11 +74,5 @@ class HTTP_handler:
 #   For testing purposes
 if __name__ == '__main__':
     h = HTTP_handler()
-    h._queue = [grequests.post(h._url, json={'count':'up'}),
-    grequests.post('http://httpbin.org/', json={'count':'up'}),
-    grequests.post(h._url, json={'count':'up'}),
-    grequests.post(h._url, json={'count':'up'})]
 
-    h._init_batch()
-    for i in range(len(h._queue)):
-         print(h._queue[i].response)
+    h.handle("up")
