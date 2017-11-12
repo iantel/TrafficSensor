@@ -28,7 +28,7 @@ export default class Search extends Component {
     this.searchBarOnReturn = this.searchBarOnReturn.bind(this);
     this.overlayOnTouch = this.overlayOnTouch.bind(this);
     this.updateSearch = this.updateSearch.bind(this);
-    fetch(serverURL+'get_rooms').then((response) =>
+    fetch('http://100.65.116.32:3000/get_rooms').then((response) =>
       response.json()).then((responseJson) => {
         var results = [];
         for(var i in responseJson){

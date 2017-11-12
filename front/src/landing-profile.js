@@ -3,15 +3,23 @@ import { View, Text, AppRegistry, StyleSheet, StatusBar, Button, Image,ImageBack
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SearchBar, Header } from 'react-native-elements'
 
-  
-var REQUEST_URL = http://100.65.116.32:3000/get_rooms
+
+image = {
+    Bahen: '../img/bahen.jpg',
+    Gerstein: '../img/gerstein.jpg',
+    Robarts: '../img/robarts.jpeg',
+    Other: '../img/weather.png'
+}
+
+var REQUEST_URL = 'http://100.65.116.32:3000/get_rooms' 
 
 export default class LandingProfile extends Component {
-    
   constructor(props) {
     super(props) 
     this.state = {
       movies: null,
+      url: null,
+      cap
     }
   }
     
@@ -23,8 +31,9 @@ export default class LandingProfile extends Component {
     fetch(REQUEST_URL)
       .then((response) => response.json())
       .then((responseData) => {
+        if responseData.
         this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData.movies),
+          dataSource: this.state.dataSource.cloneWithRows(responseData.name),
           loaded: true,
         })
       })
