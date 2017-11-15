@@ -25,6 +25,7 @@ export default class LandingProfile extends Component {
     }
     this.fetchFavorites();
     console.log(this.state.room);
+    CONSOL
   }
 
   async fetchFavorites() {
