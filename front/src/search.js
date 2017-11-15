@@ -8,6 +8,8 @@ export default class Search extends Component {
 
   constructor(props) {
     super(props);
+    var prodURL = 'https://lit-brook-11855.herokuapp.com/get_rooms';
+    var devURL = "http://192.168.0.17:5000/get_rooms";
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
         searchBarWidth: Dimensions.get('window').width*0.96,
@@ -59,8 +61,8 @@ export default class Search extends Component {
   }
 
   fetchData(){
-
-    fetch('http://100.65.116.32:3000/get_rooms').then((response) =>
+    var devURL = "http://192.168.0.17:5000/get_rooms";
+    fetch(String(devURL)).then((response) =>
       response.json()).then((responseJson) => {
         var results = [];
         for(var i in responseJson){
