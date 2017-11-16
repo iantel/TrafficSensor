@@ -10,7 +10,6 @@ import Search from './src/search.js'
 import Settings from './src/settings.js'
 import Preference from './src/preference.js'
 
-const serverURL = 'http://100.65.116.32:3000/';
 
 const Footer = TabNavigator({
   Landing: {
@@ -99,17 +98,17 @@ class main extends Component {
   }
 }
 
-const ModalStack = StackNavigator({
-  Preference: {
-    screen: Preference,
-  },
-  Footer: {
-    screen: Footer,
-  }
-},{
-    headerMode: 'null'
-
-  });
+// const ModalStack = StackNavigator({
+//   Preference: {
+//     screen: Preference,
+//   },
+//   Footer: {
+//     screen: Footer,
+//   }
+// },{
+//     headerMode: 'null'
+//
+//   });
 
 
 
