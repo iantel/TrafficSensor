@@ -9,13 +9,14 @@ var Room = require('../models/room.js');
 
 router.get('/',function(req, res){
   // return all the rooms
-  Room.find(function(err, test) {
-    res.send(test);
+  Room.find(function(err, rooms) {
+    res.send(rooms);
   });
 });
 
 router.post('/', function(req, res) {
   // return the rooms with name
+  console.log(req.query);
   Room.find({ 'name': req.query.name }, function(err, result) {
     res.send(result);
   });

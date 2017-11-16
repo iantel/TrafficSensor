@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import { View, Text, AppRegistry, StyleSheet, StatusBar ,AsyncStorage, TouchableWithoutFeedback, Alert, ListView, RefreshControl} from 'react-native';
+import {ListItem , FlatList ,View, Text, AppRegistry, StyleSheet, StatusBar ,AsyncStorage, TouchableWithoutFeedback, Alert, ListView, RefreshControl, ActivityIndicator} from 'react-native';
 import { SearchBar, Header } from 'react-native-elements'
 const Dimensions = require('Dimensions');
 import FavoriteButton from './components/favoriteButton.js'
-
+import api from './network/api.js'
 export default class Search extends Component {
 
   constructor(props) {
@@ -29,11 +29,14 @@ export default class Search extends Component {
     this.updateSearch = this.updateSearch.bind(this);
     this.fetchData = this.fetchData.bind(this);
     this.followRoom = this.followRoom.bind(this);
-    this.fetchData();
-    this.fetchData();
     this.updateFollowed = this.updateFollowed.bind(this);
-    this.updateFollowed();
+    this.fetchDataFor = this.fetchDataFor.bind(this);
 
+  }
+
+  componentWillMount(){
+      this.fetchData();
+      this.updateFollowed();
 
 
   }
@@ -41,19 +44,17 @@ export default class Search extends Component {
   async updateFollowed(){
 
      try {
-       var results = []
+       var results = {}
        const values = await AsyncStorage.getAllKeys((err, keys) => {
          AsyncStorage.multiGet(keys, (err, stores) => {
            stores.map((result, i, store) => {
-             let key = store[i][0];
-             let value = store[i][1];
-             results.push(value);
+             let key = result[0];
+             let value = result[1];
+             results[key] = JSON.parse(value);
            });
-           console.log(results)
            this.setState({
              followed: results
            });
-
          });
        });
 
@@ -61,8 +62,7 @@ export default class Search extends Component {
   }
 
   fetchData(){
-    var devURL = "http://192.168.0.17:5000/get_rooms";
-    fetch(String(devURL)).then((response) =>
+    fetch(api.apiGetRoomsURL).then((response) =>
       response.json()).then((responseJson) => {
         var results = [];
         for(var i in responseJson){
@@ -71,13 +71,33 @@ export default class Search extends Component {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.setState({
             result: results.concat(),
+            searchResult: this.state.loaded ? this.state.searchResult: results.concat(),
             dataSource: ds.cloneWithRows(results.concat()),
             refreshing: false,
             loaded: true
         });
       }).catch((error) => {
-        Alert.alert(error);
+        console.log(error)
       });
+  }
+  fetchDataFor(name){
+    var body = '?name=' + name
+    var devURL = api.apiGetRoomsURL + body;
+    fetch(String(devURL),
+      {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    }).then((response) =>
+        response.json()).then((responseJson) => {
+          var favoriteData = responseJson[0]
+          AsyncStorage.setItem(name, JSON.stringify(favoriteData), ()=>{
+            this.updateFollowed();
+          });
+
+      }).catch((error) => {console.log(error)});
   }
 
   setColor(color) {
@@ -114,7 +134,7 @@ export default class Search extends Component {
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     if(text == ""){
       this.setState({
-          dataSource: ds.cloneWithRows(this.state.result),
+        searchResult: this.state.result
       })
       return;
     }
@@ -128,26 +148,21 @@ export default class Search extends Component {
 
     this.setState({
         searchValue: text,
-        searchResult: results,
-        dataSource: ds.cloneWithRows(results),
+        searchResult: results
     })
   }
 
   async followRoom(name){
+
     try {
-      const value = await AsyncStorage.getItem(name);
-      if (this.state.followed.indexOf(value) != -1){
+      if (name in this.state.followed){
         await AsyncStorage.removeItem(name, ()=>{
           this.updateFollowed();
         })
       } else {
-        try {
-          await AsyncStorage.setItem(name, name, ()=>{
-            this.updateFollowed();
-          });
-        } catch (error) {console.log(error)}
+        this.fetchDataFor(name)
       }
-    } catch (error) {}
+    } catch (error) {console.log(error)}
   }
 
   render() {
@@ -168,6 +183,13 @@ export default class Search extends Component {
                   </View>
                 </TouchableWithoutFeedback>
 
+    }
+    if (!this.state.loaded){
+      return (
+        <View>
+          <ActivityIndicator />
+        </View>
+      )
     }
     return (
       <View style={styles.container}>
@@ -200,25 +222,24 @@ export default class Search extends Component {
 
           onEndEditing={() => this.searchBarOnReturn()}
           />
-        <ListView
-          enableEmptySections={true}
-          refreshControl={
+        <FlatList
+         refreshControl={
             <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={this._onRefresh.bind(this)}
             />
           }
-          enableEmptySection={true}
-          dataSource={this.state.dataSource}
-          renderRow={(rowData) =>
-            <View style = {styles.searchItem}>
-              <Text style = {{fontSize:15, flex: 5, top: 15, backgroundColor:'transparent'}}>
-                {rowData}
-              </Text>
-              <FavoriteButton onpress={()=>this.followRoom(rowData)} followed={this.state.followed.indexOf(rowData) != -1}/>
-            </View>
+          data={this.state.searchResult}
+          renderItem={({item}) =>
+          <View style = {styles.searchItem}>
+                 <Text style = {{fontSize:15, flex: 5, top: 15, backgroundColor:'transparent'}}>
+                  {item}
+                </Text>
+                <FavoriteButton onpress={()=>this.followRoom(item)} followed={item in this.state.followed}/>
+              </View>
           }
         />
+
         {overlay}
 
       </View>
