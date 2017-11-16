@@ -40,13 +40,11 @@ export default class Settings extends Component {
   render() {
     return (
       <View style={styles.container2}>
-        <View style={[styles.box, styles.box1]}>
           <Header
-            centerComponent={{ flex: 1, text: 'RoomFinder : Settings', style: { fontSize: 25,
-  color: '#fff', fontWeight: 'bold'} }}
-            outerContainerStyles={{ backgroundColor: '#28B490' }}
-          />
-        </View>
+          centerComponent={{ text: 'Settings', style: { fontSize: 19,
+color: '#fff', fontWeight: 'bold'} }}
+          outerContainerStyles={{ backgroundColor: '#28B490' }}
+        />
         <View style={[styles.box, styles.box2]}>
 
         <View style={styles.settingItems}>

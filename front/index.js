@@ -39,7 +39,7 @@ const Footer = TabNavigator({
   Settings: {
     screen: Settings,
     navigationOptions: {
-      tabBarIcon: ({ tintColor,activeTintColorColor, focused }) => (
+      tabBarIcon: ({ tintColor, focused }) => (
         <Ionicons
           name={focused ? 'md-settings' : 'ios-settings-outline'}
           size={30}

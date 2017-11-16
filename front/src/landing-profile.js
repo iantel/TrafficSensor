@@ -11,10 +11,10 @@ import { BlurView, VibrancyView } from 'react-native-blur';
 
 
 image = {
-    Bahen: require('../img/bahen.jpg'),
-    Gerstein: require('../img/gerstein.jpg'),
-    Robarts: require('../img/robarts.jpeg'),
-    Other: require('../img/weather.png')
+    Bahen: '../img/bahen.jpg',
+    Gerstein: '../img/gerstein.jpg',
+    Robarts: '../img/robarts.jpeg',
+    Other: '../img/weather.png'
 }
 
 
@@ -58,13 +58,13 @@ export default class LandingProfile extends Component {
         for (i = 0; i< responseData.length; i++) {
           if (responseData[i].name in this.state.room) {
             //setting img_url
-            var img = image.Other;
+            var imgURL = image.Other;
             if (responseData[i].name[0] + responseData[i].name[1] == "BA") {
-                img = image.Bahen;
+                imgURL = image.Bahen;
             } else if (responseData[i].name[0] + responseData[i].name[1] == "Ge") {
-                img = image.Gerstein;
+                imgURL = image.Gerstein;
             } else if (responseData[i].name[0] + responseData[i].name[1] == "RB") {
-                img = image.Robarts;
+                imgURL = image.Robarts;
             }
 
 
@@ -100,15 +100,15 @@ export default class LandingProfile extends Component {
 
   renderLoadingView() {
     return (
-    <View style={styles.container}>
+    <View style={styles.loading}>
       <StatusBar barStyle="light-content" />
-        <Header
+      <Header
           centerComponent={{ text: 'RoomFinder', style: { fontSize: 19,
 color: '#fff', fontWeight: 'bold'} }}
           outerContainerStyles={{ backgroundColor: '#28B490' }}
         />
-      <View style={styles.loading}>
-        <Text>
+      <View style={styles.loadingWrapper}>
+        <Text style={styles.loadingText}>
           Loading...
         </Text>
       </View>
@@ -119,7 +119,6 @@ color: '#fff', fontWeight: 'bold'} }}
 
   renderSwiper() {
     const { navigate } = this.props.navigation;
-
     return (
         <View style={styles.container}>
             <StatusBar barStyle="light-content" />
@@ -170,9 +169,6 @@ const styles = StyleSheet.create({
 
   loading: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
 
@@ -201,9 +197,23 @@ const styles = StyleSheet.create({
     paddingTop: 60,
   },
 
+  loadingWrapper: {
+    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    paddingTop: 20,
+  },
+
   title: {
     backgroundColor: 'transparent',
   	color: 'white',
+  	fontSize: 30,
+  	fontWeight: 'normal',
+    textAlign: 'center',
+  },
+    
+  loadingText: {
+    backgroundColor: 'transparent',
+  	color: 'black',
   	fontSize: 30,
   	fontWeight: 'normal',
     textAlign: 'center',
