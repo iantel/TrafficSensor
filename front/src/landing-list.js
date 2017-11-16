@@ -30,7 +30,6 @@ export default class LandingList extends Component {
   fetchDataFor(name){
     var body = '?name=' + name
     var devURL = api.apiGetRoomsURL + body;
-    this.setState({refreshing: true});
     fetch(String(devURL),
       {
       method: 'POST',
