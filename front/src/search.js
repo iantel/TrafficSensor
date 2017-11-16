@@ -20,7 +20,8 @@ export default class Search extends Component {
         result: [],
         dataSource: ds.cloneWithRows([]),
         followed:[],
-        loaded:false
+        loadedAllRooms:false,
+        loadedAllRoomsFollowed:false
     }
     this.setColor = this.setColor.bind(this);
     this.searchBarOnClick = this.searchBarOnClick.bind(this);
@@ -35,10 +36,8 @@ export default class Search extends Component {
   }
 
   componentWillMount(){
-      this.fetchData();
       this.updateFollowed();
-
-
+      this.fetchData();
   }
 
   async updateFollowed(){
@@ -50,14 +49,15 @@ export default class Search extends Component {
            stores.map((result, i, store) => {
              let key = result[0];
              let value = result[1];
+             console.log(value)
              results[key] = JSON.parse(value);
            });
            this.setState({
-             followed: results
+             followed: results,
+             loadedAllRoomsFollowed: true
            });
          });
        });
-
      } catch (error) {console.log(error)}
   }
 
@@ -74,8 +74,9 @@ export default class Search extends Component {
             searchResult: results.concat(),
             dataSource: ds.cloneWithRows(results.concat()),
             refreshing: false,
-            loaded: true
+            loadedAllRooms: true
         });
+
       }).catch((error) => {
         console.log(error)
       });
@@ -169,7 +170,6 @@ export default class Search extends Component {
   render() {
     let button = null;
     let overlay = null;
-    console.log(this.state.followed)
     if (!this.state.cancelButtonHidden){
       button = {
         color: '#ffffff', name: 'cancel', style:{top: 30}
@@ -186,7 +186,7 @@ export default class Search extends Component {
                 </TouchableWithoutFeedback>
 
     }
-    if (!this.state.loaded){
+    if (!this.state.loadedAllRooms || !this.state.loadedAllRoomsFollowed){
       return (
         <View>
           <ActivityIndicator />
@@ -225,7 +225,6 @@ export default class Search extends Component {
           onEndEditing={() => this.searchBarOnReturn()}
           />
         <FlatList
-
           data={this.state.searchResult}
           renderItem={({item}) =>
           <View style = {styles.searchItem}>

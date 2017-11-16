@@ -15,50 +15,43 @@ const LandingPage = StackNavigator({
   }, {
    headerMode: 'none',
    navigationOptions: {
+     mode : 'modal',
      gesturesEnabled: false,
-   },
-   transitionConfig: TransitionConfiguration
+   }
 });
 
-let MyTransition = (index, position) => {
-    const inputRange = [index - 1, index, index + 1];
-    const outputRange = [.8, 50, 1];
-    const opacity = position.interpolate({
-        inputRange,
-        outputRange,
-    });
+const prevGetStateForAction = LandingPage.router.getStateForAction;
 
-    const scaleY = position.interpolate({
-        inputRange,
-        outputRange,
-    });
-
-    return {
-    transitionSpec: MyTransitionSpec,
-    opacity,
-        transform: [
-            {scaleY}
-        ]
-    };
-};
-
-const MyTransitionSpec = ({
-    duration: 2000,
-    easing: Easing.bezier(0.2833, 0.99, 0.31833, 0.99),
-    timing: Animated.timing,
-});
-
-let TransitionConfiguration = () => {
-    return {
-        // Define scene interpolation, eq. custom transition
-        screenInterpolator: (sceneProps) => {
-            const {position, scene} = sceneProps;
-            const {index} = scene;
-
-            return MyTransition(index, position);
-        }
+LandingPage.router = {
+  ...LandingPage.router,
+  getStateForAction(action, state){
+    if(state && action.type == 'ReplaceCurrentScreen'){
+      console.log("1")
+      for (var i in state.routes) {
+        console.log(state.routes[i])
+      }
+      const routes = state.routes.slice(0, state.routes.length - 2);
+      console.log("2")
+      for (var i in routes) {
+        console.log(routes[i])
+      }
+      routes.push(action);
+      console.log("3")
+      for (var i in routes) {
+        console.log(routes[i])
+      }
+      return {
+        ...state,
+        routes,
+        index:routes.length - 1,
+      }
     }
-};
+    return prevGetStateForAction(action, state)
+  }
+}
+
+
+
 
 
 export default class Landing extends Component {

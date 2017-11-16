@@ -19,6 +19,7 @@ class FavoriteButton extends React.Component {
     this.props.onpress()
   }
   render() {
+    console.log(this.props.followed)
     return (
       <TouchableOpacity style={{flex:1, backgroundColor:'transparent'}} onPress={()=>this.onClick()}>
       <Ionicons

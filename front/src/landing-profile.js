@@ -22,7 +22,7 @@ export default class LandingProfile extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      room: {},
+      room: [],
       info: [],
       index: 0,
       loaded: false,
@@ -38,7 +38,7 @@ export default class LandingProfile extends Component {
      // get at each store's key/value so you can work with it
             let key = store[i][0];
             let value = store[i][1];
-            this.state.room[key] = value;
+            this.state.room.push(JSON.parse(value).name);
             });
           });
         });
@@ -55,9 +55,9 @@ export default class LandingProfile extends Component {
     fetch(api.apiGetRoomsURL)
       .then((response) => response.json())
       .then((responseData) => {
+        console.log(this.state.room)
         for (i = 0; i< responseData.length; i++) {
-          if (responseData[i].name in this.state.room) {
-            //setting img_url
+          if (this.state.room.indexOf(responseData[i].name) != -1) {
             var imgURL = image.Other;
             if (responseData[i].name[0] + responseData[i].name[1] == "BA") {
                 imgURL = image.Bahen;
@@ -69,8 +69,9 @@ export default class LandingProfile extends Component {
 
 
             if (this.props.navigation.state.params) {
+
                 if (this.props.navigation.state.params.name == responseData[i].name) {
-                this.setState({index: i});
+                  this.setState({index: i});
                 }
             }
 
@@ -117,6 +118,7 @@ color: '#fff', fontWeight: 'bold'} }}
 
 
   renderSwiper() {
+    console.log(this.state.index)
     const { navigate } = this.props.navigation;
     return (
 
