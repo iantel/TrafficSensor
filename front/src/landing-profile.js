@@ -92,7 +92,7 @@ export default class LandingProfile extends Component {
     if(this.state.loaded) {
       return this.renderSwiper();
     }
-    return this.renderLoadingView()
+    return (<View></View>)
   }
 
 
@@ -119,13 +119,16 @@ color: '#fff', fontWeight: 'bold'} }}
   renderSwiper() {
     const { navigate } = this.props.navigation;
     return (
+
         <View style={styles.container}>
+
             <StatusBar barStyle="light-content" />
 
             <Swiper style={styles.wrapper} index={this.state.index}
-              dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7,}} /> }
-              activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7,}} />}
-              paginationStyle={{bottom: 70}}
+              loadMinimal loadMinimalSize={1}
+              dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 6, height: 6, borderRadius: 7, marginLeft: 7, marginRight: 7,}} /> }
+              activeDot={<View style={{backgroundColor: '#fff', width: 8, height: 8, borderRadius: 7, marginLeft: 7, marginRight: 7,}} />}
+              paginationStyle={{bottom: 30}}
               loop={true}>
               {this.state.info.map((item) => {
                 return (
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
   	fontWeight: 'normal',
     textAlign: 'center',
   },
-    
+
   loadingText: {
     backgroundColor: 'transparent',
   	color: 'black',

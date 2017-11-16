@@ -22,12 +22,13 @@ class FavoriteButton extends React.Component {
     return (
       <TouchableOpacity style={{flex:1, backgroundColor:'transparent'}} onPress={()=>this.onClick()}>
       <Ionicons
-        name={this.props.followed ? 'ios-heart': 'ios-heart-outline'}
+        name={this.state.isFollowed ? 'ios-heart': 'ios-heart-outline'}
         size={30}
         style={{
          flexDirection:'row',
          top:10,
-         flex:1
+         flex:1,
+         color: '#28B490'
         }}
 
       /></TouchableOpacity>

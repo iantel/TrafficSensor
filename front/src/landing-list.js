@@ -8,6 +8,17 @@ import FavoriteRow from './components/favoritesRow'
 import api from './network/api.js'
 export default class LandingList extends Component {
 
+  static navigationOptions: {
+    cardStack: {
+      transitions: [
+        {
+          to: 'LandingProfile',
+          config: { duration: 10000 },
+        },
+      ]
+    }
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +52,7 @@ export default class LandingList extends Component {
         response.json()).then((responseJson) => {
           var favoriteData = responseJson[0]
           AsyncStorage.setItem(name, JSON.stringify(favoriteData), ()=>{
-            this.updateFollowed();
+            this.state.followed[name] = favoriteData
           });
 
       }).catch((error) => {console.log(error)});
@@ -56,6 +67,7 @@ export default class LandingList extends Component {
              let key = result[0];
              let value = result[1];
              results[key] = JSON.parse(value);
+             this.fetchDataFor(key)
            });
            this.setState({
              followed: results,
@@ -70,14 +82,16 @@ export default class LandingList extends Component {
 
   _onRefresh() {
     this.setState({refreshing: true});
-    for(var i in this.state.followed){
-      this.fetchDataFor(i)
+    if (this.state.followed.length == 0) {
+      this.setState({refreshing: false});
     }
+    this.updateFollowed()
   }
 
 
   render() {
     var followed = []
+    console.log(this.state.followed)
     for (var i in this.state.followed) {
       followed.push(this.state.followed[i])
     }

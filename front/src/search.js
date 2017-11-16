@@ -71,7 +71,7 @@ export default class Search extends Component {
         const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         this.setState({
             result: results.concat(),
-            searchResult: this.state.loaded ? this.state.searchResult: results.concat(),
+            searchResult: results.concat(),
             dataSource: ds.cloneWithRows(results.concat()),
             refreshing: false,
             loaded: true
@@ -80,7 +80,7 @@ export default class Search extends Component {
         console.log(error)
       });
   }
-  
+
   fetchDataFor(name){
     var body = '?name=' + name
     var devURL = api.apiGetRoomsURL + body;
@@ -169,6 +169,7 @@ export default class Search extends Component {
   render() {
     let button = null;
     let overlay = null;
+    console.log(this.state.followed)
     if (!this.state.cancelButtonHidden){
       button = {
         color: '#ffffff', name: 'cancel', style:{top: 30}
@@ -224,12 +225,7 @@ export default class Search extends Component {
           onEndEditing={() => this.searchBarOnReturn()}
           />
         <FlatList
-         refreshControl={
-            <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh.bind(this)}
-            />
-          }
+
           data={this.state.searchResult}
           renderItem={({item}) =>
           <View style = {styles.searchItem}>
