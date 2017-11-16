@@ -129,7 +129,7 @@ color: '#fff', fontWeight: 'bold'} }}
     for (i = 0; i < this.state.info.length; i++) {
         slides.push(<View key={i} style={styles.slide}>
                         
-                        <Image source={ require(this.state.info[i].img)} style={styles.image} />
+                        <Image source={ require('../img/gerstein.jpg')} style={styles.image} />
                         <View style={styles.titleWrapper}>
                         <Text style={styles.title}>{this.state.info[i].name}</Text>
                         </View>
