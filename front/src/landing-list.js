@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { View, Text, AppRegistry, StyleSheet, StatusBar, Image,AsyncStorage } from 'react-native';
+import { FlatList, View, Text, AppRegistry, StyleSheet, StatusBar, Image,AsyncStorage } from 'react-native';
 import { SearchBar, Header } from 'react-native-elements'
 import { StackNavigator } from 'react-navigation'
 import { ListView } from 'react-native'
@@ -9,10 +9,8 @@ export default class LandingList extends Component {
 
   constructor(props) {
     super(props);
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.state = {
         refreshing: false,
-        dataSource: ds.cloneWithRows([1,2,3]),
         followed:[],
         loaded:false
     }
@@ -21,27 +19,26 @@ export default class LandingList extends Component {
   }
 
   async updateFollowed(){
+
      try {
-       var results = []
+       var results = {}
        const values = await AsyncStorage.getAllKeys((err, keys) => {
          AsyncStorage.multiGet(keys, (err, stores) => {
            stores.map((result, i, store) => {
-             let key = store[i][0];
-             let value = store[i][1];
-             results.push(value);
+             let key = result[0];
+             let value = result[1];
+             results[key] = JSON.parse(value);
            });
-           const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
            this.setState({
              followed: results,
-             dataSource: ds.cloneWithRows(results),
              refreshing: false
            });
-           console.log(results)
          });
        });
 
      } catch (error) {console.log(error)}
   }
+
 
   _onRefresh() {
     this.setState({refreshing: true});
@@ -50,23 +47,34 @@ export default class LandingList extends Component {
 
 
   render() {
+    console.log(this.state.followed)
+    var followed = []
+    for (var i in this.state.followed) {
+      followed.push(this.state.followed[i])
+    }
     const { navigate } = this.props.navigation;
+
     return (
       <View style={styles.container}>
 
         <StatusBar barStyle="light-content" />
-        <ListView
+        <FlatList
           refreshControl={
             <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={this._onRefresh.bind(this)}
             />
           }
-          enableEmptySections={true}
-          dataSource={this.state.dataSource}
-          renderRow={(rowData) =>
-            <FavoriteRow roomName = {rowData} onpress={() => navigate('Profile', {name: rowData})}  capacity={50} occupied={10}/>
-          }
+          data={followed}
+          renderItem={({item}) =>
+            <View style = {styles.searchItem}>
+                   <FavoriteRow
+                     roomName = {item.name}
+                     onpress={() => navigate('Profile', {name: item.name})}
+                     capacity={item.max_capacity}
+                     occupied={item.current_occupancy}
+                     image={item.image}/>
+            </View>}
         />
       </View>
     );
