@@ -5,6 +5,7 @@ import { StackNavigator } from 'react-navigation'
 import { ListView } from 'react-native'
 import { RefreshControl } from 'react-native'
 import FavoriteRow from './components/favoritesRow'
+import api from './network/api.js'
 export default class LandingList extends Component {
 
   constructor(props) {
@@ -15,11 +16,39 @@ export default class LandingList extends Component {
         loaded:false
     }
     this.updateFollowed = this.updateFollowed.bind(this);
+    this.fetchDataFor = this.fetchDataFor.bind(this);
     this.updateFollowed();
   }
 
-  async updateFollowed(){
+  componentWillMount(){
+      this.updateFollowed();
+      for(var i in this.state.followed){
+        this.fetchDataFor(i)
+      }
+  }
 
+  fetchDataFor(name){
+    var body = '?name=' + name
+    var devURL = api.apiGetRoomsURL + body;
+    this.setState({refreshing: true});
+    fetch(String(devURL),
+      {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    }).then((response) =>
+        response.json()).then((responseJson) => {
+          var favoriteData = responseJson[0]
+          AsyncStorage.setItem(name, JSON.stringify(favoriteData), ()=>{
+            this.updateFollowed();
+          });
+
+      }).catch((error) => {console.log(error)});
+  }
+
+  async updateFollowed(){
      try {
        var results = {}
        const values = await AsyncStorage.getAllKeys((err, keys) => {
@@ -42,12 +71,13 @@ export default class LandingList extends Component {
 
   _onRefresh() {
     this.setState({refreshing: true});
-    this.updateFollowed();
+    for(var i in this.state.followed){
+      this.fetchDataFor(i)
+    }
   }
 
 
   render() {
-    console.log(this.state.followed)
     var followed = []
     for (var i in this.state.followed) {
       followed.push(this.state.followed[i])

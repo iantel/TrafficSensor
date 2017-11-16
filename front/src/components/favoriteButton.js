@@ -20,7 +20,7 @@ class FavoriteButton extends React.Component {
   }
   render() {
     return (
-      <TouchableOpacity style={{flex:1}} onPress={()=>this.onClick()}>
+      <TouchableOpacity style={{flex:1, backgroundColor:'transparent'}} onPress={()=>this.onClick()}>
       <Ionicons
         name={this.props.followed ? 'ios-heart': 'ios-heart-outline'}
         size={30}

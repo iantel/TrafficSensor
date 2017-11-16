@@ -80,6 +80,7 @@ export default class Search extends Component {
         console.log(error)
       });
   }
+  
   fetchDataFor(name){
     var body = '?name=' + name
     var devURL = api.apiGetRoomsURL + body;

@@ -84,7 +84,6 @@ export default class LandingProfile extends Component {
           }
         }
         this.setState({loaded: true,});
-        console.log(this.state.info)
       })
       .done();
   }
