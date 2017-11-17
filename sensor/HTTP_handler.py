@@ -13,7 +13,7 @@ class HTTP_handler:
 
     def __init__(self):
         self._queue = Queue()
-        self._url = 'http://100.65.116.32:3000/get_rooms'
+        self._url = 'http://lit-brook-11855.herokuapp.com/rooms'
         self._pending = 0
         self._queue_lock = Lock()
 
@@ -32,7 +32,7 @@ class HTTP_handler:
         while (tries < 3):
             print("Attempting to send...")
             # timeout is 3 seconds at which point we store it on a queue to POST at a later point in time.
-            request = Request('POST', self._url, params={'name':'BA3200'}).prepare()
+            request = Request('POST', self._url, params={'name':'BA3200', 'count':event_type}).prepare()
             try:
                 response = Session().send(request, timeout=3.0)
                 response.raise_for_status() # raise an HTTPError if response code wasn't 200
@@ -43,12 +43,12 @@ class HTTP_handler:
                 sleep_time = sleep_time + 1
                 tries = tries + 1
                 continue
-        self._queue.put_nowait(grequests.post(self._url, json={'count':event_type}))
+        self._queue.put_nowait(grequests.post(self._url, params={'name':'BA3200', 'count':event_type}))
 
         # If we have enough previously failed calls, attempt to send them at once
         with self._queue_lock:
             self._pending = self._pending + 1
-            if (self._pending == 5):
+            if (self._pending >= 5):
                 self._send_batch()
                 self._pending = 0
         print(self._pending)
@@ -76,3 +76,4 @@ if __name__ == '__main__':
     h = HTTP_handler()
 
     h.handle("up")
+    h.handle("down")
