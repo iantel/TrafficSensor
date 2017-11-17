@@ -43,8 +43,10 @@ router.post('/', function(req, res) {
 	  		// }
 	  		// else 
 	  			if(result[0] != null) {
-	  			result[0].current_occupancy = result[0].current_occupancy - 1;
-	  			result[0].save();
+	  				if (result[0].current_occupancy != 0) {
+	  					result[0].current_occupancy = result[0].current_occupancy - 1;
+	  					result[0].save();
+	  				}
 	  			res.sendStatus(200);
 
 		  	} else {
