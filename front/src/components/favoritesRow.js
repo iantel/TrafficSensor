@@ -5,11 +5,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 const Dimensions = require('Dimensions');
 import { BlurView, VibrancyView } from 'react-native-blur';
 let width = Dimensions.get('window').width
+import api from '../network/api.js'
+
 const FavoriteRow = (props) => {
   const { roomName, onpress, capacity, occupied, image} = props;
-  var prodURL = 'https://lit-brook-11855.herokuapp.com';
-  var devURL = "http://192.168.0.17:3000";
-  var photoURL = devURL + props.image
+  var photoURL = api.apiURL + props.image
 
   return (
       <TouchableOpacity style={{flex:1, height:90, justifyContent: 'center', flexDirection:'row'}} onPress={onpress}>

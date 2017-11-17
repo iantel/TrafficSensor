@@ -13,7 +13,7 @@ export default class LandingList extends Component {
       transitions: [
         {
           to: 'LandingProfile',
-          config: { duration: 10000 },
+          config: { duration: 1000},
         },
       ]
     }
@@ -91,6 +91,7 @@ export default class LandingList extends Component {
 
   render() {
     var followed = []
+    console.log(this.state.followed)
     for (var i in this.state.followed) {
       followed.push(this.state.followed[i])
     }
