@@ -7,6 +7,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));
 app.use(express.json());       // to support JSON-encoded bodies
 app.use(express.urlencoded());
+app.use(express.static('public'))
 
 app.get('/', function (req, res) {
 	res.send('Hello World!');
