@@ -26,7 +26,6 @@ class HTTP_handler:
 
 
 	async def handle(self, event_type):
-		print('hello')
 		async with aiohttp.ClientSession() as session:
 			response_code = await self.send_post(session, event_type)
 			print(response_code)
@@ -42,4 +41,4 @@ class HTTP_handler:
 #   For testing purposes
 if __name__ == '__main__':
 	h = HTTP_handler()
-	asyncio.run_coroutine_threadsafe(h.handle('up'), h._event_loop)
+	asyncio.run_coroutine_threadsafe(h.handle('down'), h._event_loop)

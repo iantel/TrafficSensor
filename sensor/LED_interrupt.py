@@ -1,10 +1,11 @@
 import RPi.GPIO as GPIO
 import time
-from HTTP_handler import HTTP_handler
+from HTTP_handler_async import HTTP_handler
+import asyncio
 
 sensor1_state = 0 # 0 = LOW, 1 = HIGH
 sensor2_state = 0
-HTTP_handler = None
+handler  = None
 
 # pin: indicates the pin on which the GPIO interrupt was triggered.
 def sensor1_callback(pin):
@@ -18,7 +19,7 @@ def sensor1_callback(pin):
 		if(sensor2_state == 1): # if the front triggered is high, then this is the 2nd sensor to trip, e.g someone is leaving the room
 			sensor1_state = 0 	# set state to 0 to avoid false positives on leaving people
 			print('leaving')
-			handler.handle('down')
+			asyncio.run_coroutine_threadsafe(handler.handle('down'), handler._event_loop)
 	else:	# no movement detected
 		sensor1_state = 0
 
@@ -33,12 +34,13 @@ def sensor2_callback(pin):
 		if(sensor1_state == 1):
 			sensor2_state = 0
 			print('entering')
-			handler.handle('up')
+			asyncio.run_coroutine_threadsafe(handler.handle('up'), handler._event_loop)
 	else:
 		sensor2_state = 0
 
 #setup GPIO pins on Pi
 def initialize():
+	global handler
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setwarnings(False)
 	GPIO.setup(26, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) #PIR sensor 1
